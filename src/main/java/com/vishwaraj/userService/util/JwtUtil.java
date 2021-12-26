@@ -8,6 +8,7 @@ import com.vishwaraj.userService.service.UserService;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -20,6 +21,7 @@ import java.util.stream.Collectors;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 @Service
+@Slf4j
 public class JwtUtil {
     private String SECRET_KEY = "secret";
 
@@ -45,11 +47,13 @@ public class JwtUtil {
     }
 
     public Optional<?> generateToken(UserDetails user){
+        log.info("Inside the genrateToken {}", user);
         Map<String, Object> claims = new HashMap<>();
         return createToken(claims, user);
     }
 
     private Optional<?> createToken(Map<String,Object> claims, UserDetails user){
+        log.info("Inside the createToken");
 
 
         Date expiresAccessTokenAt = new Date(System.currentTimeMillis() + 60 * 60 * 1000);
@@ -68,6 +72,7 @@ public class JwtUtil {
                 .withExpiresAt(expiresRefreshTokenAt)
                 .withIssuer(user.getUsername())
                 .sign(algorithm);
+        log.info("JWT created Successfully");
 
         Map<String, String> token = new HashMap<>();
         token.put("access_token", access_token);

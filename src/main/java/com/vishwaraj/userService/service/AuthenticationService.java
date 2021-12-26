@@ -30,6 +30,7 @@ public class AuthenticationService {
     private JwtUtil jwtUtil;
 
     public ResponseEntity<?> createJWTToken(AuthenticationRequest authenticationRequest) throws Exception{
+        log.info("Inside the createJWTToken for {}", authenticationRequest);
         try {
             authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(authenticationRequest.getUserName(), authenticationRequest.getUserPassword()
@@ -41,6 +42,7 @@ public class AuthenticationService {
             return ResponseEntity.badRequest().body(errorMessage);
         }
         final UserDetails userDetails = userService.loadUserByUsername(authenticationRequest.getUserName());
+        log.info("User Details has been loaded successfully {}", userDetails);
 
 
         AuthenticationResponse authenticationResponse = new AuthenticationResponse();
