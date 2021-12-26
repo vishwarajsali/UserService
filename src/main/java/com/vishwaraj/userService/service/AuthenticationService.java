@@ -46,6 +46,9 @@ public class AuthenticationService {
             errorMessage.setStatus("401");
             errorMessage.setMessage("Incorrect Username and Password!!!");
             return ResponseEntity.badRequest().body(errorMessage);
+        }catch (Exception e){
+
+            log.info("Failed the getting from DB {}", e);
         }
         final UserDetails userDetails = userService.loadUserByUsername(authenticationRequest.getUserName());
         log.info("User Details has been loaded successfully {}", userDetails);
