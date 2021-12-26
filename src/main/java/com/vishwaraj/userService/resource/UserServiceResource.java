@@ -40,6 +40,7 @@ public class UserServiceResource {
 
     @PostMapping("/authenticate")
     public ResponseEntity<?> createAuthenticateToken(@RequestBody AuthenticationRequest authenticationRequest) throws Exception{
+        log.info("Inside the authenticate method");
         return authenticationService.createJWTToken(authenticationRequest);
     }
 

@@ -13,6 +13,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.Map;
@@ -26,16 +27,21 @@ public class AuthenticationService {
     @Autowired
     private UserService userService;
 
+    private final PasswordEncoder passwordEncoder;
     @Autowired
     private JwtUtil jwtUtil;
 
     public ResponseEntity<?> createJWTToken(AuthenticationRequest authenticationRequest) throws Exception{
         log.info("Inside the createJWTToken for {}", authenticationRequest);
         try {
+            //authenticationRequest.setUserPassword(passwordEncoder.encode(authenticationRequest.getUserPassword()));
             authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(authenticationRequest.getUserName(), authenticationRequest.getUserPassword()
                     ));
+            log.info("Getting user from the DB {}", authenticationRequest);
         }catch (BadCredentialsException e){
+
+            log.info("Failed the getting from DB {}", e);
             CustomErrorMessage errorMessage = new CustomErrorMessage();
             errorMessage.setStatus("401");
             errorMessage.setMessage("Incorrect Username and Password!!!");
